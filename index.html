@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    fieldset {
+        border: 2px solid #000;
+        padding: 0;
+        margin: 5px;
+        width: 0;
+        border-radius: 9px;
+    }
+
+    .input {
+        background: transparent;
+        border: transparent;
+        outline: none;
+        font-size: 22px;
+	padding:5px;
+    }
+
+    #btn {
+        font-size: 21px;
+        color: #000;
+        border: 2px solid black;
+        padding: 5px;
+        border-radius: 3px;
+        outline: none;
+        cursor: pointer;
+        margin: 3px;
+        transition: background-color 0.3s ease-in-out;        
+    }
+    
+    #btn:hover {
+        background-color: #0075ff;
+        color: #ffffff;
+    }
+
+    #remember {
+        cursor: pointer;
+    }
+
+    #userimg {
+        border: 1px solid;
+        width: 232px;
+        border-radius: 200px;
+        margin-bottom: 8px;
+        height:221px;
+    }
+
+    .changeimg {
+        display: flex;
+        border: 1.9px solid;
+        width: 200px;
+        height: 37px;
+        align-items: center;
+        border-radius: 12px;
+        padding-left: 5px;
+        background: #87c0f1;
+    }
+
+    #camera {
+        background: transparent;
+        border: transparent;
+        outline: none;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* #age .show+body {
+        background-color: red;
+    } */
+</style>
+
+<body>
+    <div class="form">
+        <form method="POST">
+
+            <input onchange="fileSelected();" style="display: none;" id="file" type="file" name="img" accept="image/*">
+            <div class="icon">
+                <img id="userimg" src="defult user.png" alt="">
+                <div class="changeimg">
+                    <p>Change profile photo</p>
+                    <button type="button" id="camera">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="currentColor"
+                            class="bi bi-camera" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M15 12V6a1 1 0 0 0-1-1h-1.172a3 3 0 0 1-2.12-.879l-.83-.828A1 1 0 0 0 9.173 3H6.828a1 1 0 0 0-.707.293l-.828.828A3 3 0 0 1 3.172 5H2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z" />
+                            <path fill-rule="evenodd"
+                                d="M8 11a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                            <path d="M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <fieldset class="inp" id="name">
+                <legend>First Name</legend>
+                <input type="text" name="ftname" class="input ftname">
+            </fieldset>
+
+            <fieldset class="inp">
+                <legend>Last Name</legend>
+                <input type="text" name="ltname" class="input ltname">
+            </fieldset>
+
+            <fieldset class="inp">
+                <legend>Age</legend>
+                <input type="number" name="age" id="age" class="input age">
+            </fieldset>
+            <p><small style="color: red; display: none;" id="war">⚫ Age must grater than 12</small></p>
+
+            <input style="outline: none;" value="yes" type="checkbox" name="remenber" id="remember"> Remember me
+            <br>
+            <button type="button" name="login" id="btn">Back</button>
+            <button type="button" id="btn" class="login">Login</button>
+            <button type="reset" id="btn">Reset</button>
+
+        </form>
+    </div>
+</body>
+<script src="jquery-3.5.1.min.js"></script>
+<script src="imageupload.js"></script>
+<script>
+    $('#camera').click(() => {
+        console.log("Button clickd")
+        $('#file').click();
+    })
+
+    $('#age').on('input', function (evt) {
+        var value = evt.target.value;
+        let war = document.getElementById('war');
+        if (value > 12) {
+            console.log("Valid")
+            war.style.display = "none";
+        }
+        else {
+            console.log("In valid");
+            war.style.display = "block";
+        }
+    })
+
+    $('.login').click(() => {
+        let ftname = document.querySelector('.ftname').value
+        let ltname = document.querySelector('.ltname').value
+        let age = document.querySelector('.age').value
+        let rem;
+
+        if (document.querySelector('#remember').checked == true) {
+            console.log("Checked");
+            rem = "checked"
+        }
+        else {
+            console.log("not checked");
+            rem = "not checked"
+        }
+
+        if (ftname != "" && ltname != "" && age != "") {
+            console.log("Valid form")
+            // let form={
+            //     f
+            // }
+            $.ajax({
+                type: 'POST',
+                url: 'data/login.php',
+                // 'code='+code+'userid='+userid,
+                data: {ftname: ftname , ltname: ltname , age:age, rem:rem},
+                success: function (result) {
+                    console.log(result)
+                }
+            });
+        }
+
+        else {
+            console.log("In valid form");
+        }
+    })
+</script>
+
+</html>
